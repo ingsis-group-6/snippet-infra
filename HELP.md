@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'IngSis.snippet-infra' is invalid and this project uses 'IngSis.snippetinfra' instead.
+* The original package name 'ingsis.snippet-infra' is invalid and this project uses 'ingsis.snippetinfra' instead.
 
 # Getting Started
 
