@@ -15,10 +15,44 @@ services:
   #     DB_HOST: snippet_infra_db
   #     DB_PORT: 5432
 
-  snippet-manager:
-    image: ghcr.io/ingsis-group-6/snippet-manager:latest
+
+  snippet-api:
+    image: ghcr.io/ingsis-group-6/snippet-api:latest
     ports:
       - "8080:8080"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: password
+      DB_NAME: compose-db
+      DB_HOST: snippet_manager_db
+      DB_PORT: 5432
+
+  snippet-manager:
+      image: ghcr.io/ingsis-group-6/snippet-manager:latest
+      ports:
+        - "8081:8080"
+      environment:
+        DB_USER: sa
+        DB_PASSWORD: password
+        DB_NAME: compose-db
+        DB_HOST: snippet_manager_db
+        DB_PORT: 5432
+
+  snippet-runner:
+    image: ghcr.io/ingsis-group-6/snippet-runner:latest
+    ports:
+      - "8082:8080"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: password
+      DB_NAME: compose-db
+      DB_HOST: snippet_manager_db
+      DB_PORT: 5432
+
+  snippet-share:
+    image: ghcr.io/ingsis-group-6/snippet-share:latest
+    ports:
+      - "8083:8080"
     environment:
       DB_USER: sa
       DB_PASSWORD: password
