@@ -16,7 +16,6 @@ services:
   #     DB_PORT: 5432
 
   snippet-manager:
-    container_name: "snippet-manager"
     image: ghcr.io/ingsis-group-6/snippet-manager:latest
     ports:
       - "8083:8083"
