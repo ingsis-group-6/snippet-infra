@@ -67,9 +67,9 @@ services:
       - "80:80"
     volumes:
       - ./conf.d:/etc/nginx/conf.d:ro
-  my-server:
-    container_name: "my-server"
-    build: ./server
+#  my-server:
+#    container_name: "my-server"
+#    build: ./server
 
   # snippet_infra_db:
   #   container_name: snippet_infra_db
