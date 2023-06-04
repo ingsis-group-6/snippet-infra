@@ -18,6 +18,8 @@ services:
 
   snippet-api:
     image: ghcr.io/ingsis-group-6/snippet-api:latest
+#    ports:
+#      - "8080:8080"
     environment:
       DB_USER: sa
       DB_PASSWORD: password
@@ -27,6 +29,8 @@ services:
 
   snippet-manager:
       image: ghcr.io/ingsis-group-6/snippet-manager:latest
+#      ports:
+#        - "8081:8080"
       environment:
         DB_USER: sa
         DB_PASSWORD: password
@@ -36,6 +40,8 @@ services:
 
   snippet-runner:
     image: ghcr.io/ingsis-group-6/snippet-runner:latest
+#    ports:
+#      - "8082:8080"
     environment:
       DB_USER: sa
       DB_PASSWORD: password
@@ -45,6 +51,8 @@ services:
 
   snippet-share:
     image: ghcr.io/ingsis-group-6/snippet-share:latest
+#    ports:
+#      - "8083:8080"
     environment:
       DB_USER: sa
       DB_PASSWORD: password
@@ -53,17 +61,15 @@ services:
       DB_PORT: 5432
 
   proxy:
+    container_name: "reverse-proxy"
     image: nginx
     ports:
-      - "8080:8080"
+      - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - snippet-api
-      - snippet-manager
-      - snippet-runner
-      - snippet-share
+      - ./conf.d:/etc/nginx/conf.d:ro
+  my-server:
+    container_name: "my-server"
+    build: ./server
 
   # snippet_infra_db:
   #   container_name: snippet_infra_db
