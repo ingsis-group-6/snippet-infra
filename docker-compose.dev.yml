@@ -60,6 +60,19 @@ services:
       DB_HOST: snippet_manager_db
       DB_PORT: 5432
 
+  proxy:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - snippet-api
+      - snippet-manager
+      - snippet-runner
+      - snippet-share
+
   # snippet_infra_db:
   #   container_name: snippet_infra_db
   #   image: postgres:12
