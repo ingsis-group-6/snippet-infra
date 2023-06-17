@@ -8,19 +8,19 @@ services:
         - "80:80"
       volumes:
         - ./conf.d:/etc/nginx/conf.d:ro
-  snippet-infra-api:
-    container_name: "snippet-infra-api"
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8083:8083"
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_infra_db
-      DB_PORT: 5432
+  # snippet-infra-api:
+  #   container_name: "snippet-infra-api"
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     DB_USER: sa
+  #     DB_PASSWORD: password
+  #     DB_NAME: compose-db
+  #     DB_HOST: snippet_infra_db
+  #     DB_PORT: 5432
 
 
   snippet-api:
