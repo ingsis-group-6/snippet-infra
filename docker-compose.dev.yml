@@ -77,7 +77,7 @@ services:
     expose:
       - "5433"
     ports:
-      - "5433:5433"
+      - "5433:5432"
     environment:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: password
