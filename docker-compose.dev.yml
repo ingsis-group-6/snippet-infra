@@ -8,53 +8,53 @@ services:
         - "80:80"
       volumes:
         - ./conf.d:/etc/nginx/conf.d:ro
-  # snippet-infra-api:
-  #   container_name: "snippet-infra-api"
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8083:8083"
-  #   environment:
-  #     DB_USER: sa
-  #     DB_PASSWORD: password
-  #     DB_NAME: compose-db
-  #     DB_HOST: snippet_infra_db
-  #     DB_PORT: 5432
+  snippet-infra-api:
+    container_name: "snippet-infra-api"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: password
+      DB_NAME: compose-db
+      DB_HOST: snippet_infra_db
+      DB_PORT: 5432
 
 
-#   snippet-api:
-#     image: ghcr.io/ingsis-group-6/snippet-api:latest
-# #    ports:
-# #      - "8080:8080"
-#     environment:
-#       DB_USER: sa
-#       DB_PASSWORD: password
-#       DB_NAME: compose-db
-#       DB_HOST: snippet_manager_db
-#       DB_PORT: 5432
+  snippet-api:
+    image: ghcr.io/ingsis-group-6/snippet-api:latest
+#    ports:
+#      - "8080:8080"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: password
+      DB_NAME: compose-db
+      DB_HOST: snippet_manager_db
+      DB_PORT: 5432
 
-#   snippet-manager:
-#       image: ghcr.io/ingsis-group-6/snippet-manager:latest
-# #      ports:
-# #        - "8081:8080"
-#       environment:
-#         DB_USER: sa
-#         DB_PASSWORD: password
-#         DB_NAME: compose-db
-#         DB_HOST: snippet_manager_db
-#         DB_PORT: 5432
+  snippet-manager:
+      image: ghcr.io/ingsis-group-6/snippet-manager:latest
+#      ports:
+#        - "8081:8080"
+      environment:
+        DB_USER: sa
+        DB_PASSWORD: password
+        DB_NAME: compose-db
+        DB_HOST: snippet_manager_db
+        DB_PORT: 5432
 
-#   snippet-runner:
-#     image: ghcr.io/ingsis-group-6/snippet-runner:latest
-# #    ports:
-# #      - "8082:8080"
-#     environment:
-#       DB_USER: sa
-#       DB_PASSWORD: password
-#       DB_NAME: compose-db
-#       DB_HOST: snippet_manager_db
-#       DB_PORT: 5432
+  snippet-runner:
+    image: ghcr.io/ingsis-group-6/snippet-runner:latest
+#    ports:
+#      - "8082:8080"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: password
+      DB_NAME: compose-db
+      DB_HOST: snippet_manager_db
+      DB_PORT: 5432
 
   snippet-share:
     image: ghcr.io/ingsis-group-6/snippet-share:latest
@@ -76,9 +76,9 @@ services:
     container_name: snippet-share-db
     image: postgres:12
     ports:
-      - "5433:5432"
+      - "5433:5433"
     environment:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: password
       POSTGRES_DB: snippet-share-db
-    # command: -p 5433
+    command: -p 5433
