@@ -81,3 +81,4 @@ services:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: password
       POSTGRES_DB: snippet-share-db
+    command: -p 5433
