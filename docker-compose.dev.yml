@@ -76,9 +76,9 @@ services:
     container_name: snippet-share-db
     image: postgres:12
     ports:
-      - "5433:5433"
+      - "5433:5432"
     environment:
       POSTGRES_USER: sa
       POSTGRES_PASSWORD: password
       POSTGRES_DB: snippet-share-db
-    command: -p 5433
+    # command: -p 5433
