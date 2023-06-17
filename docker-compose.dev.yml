@@ -56,9 +56,9 @@ services:
     environment:
       DB_USER: sa
       DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_manager_db
-      DB_PORT: 5432
+      DB_NAME: snippet-share-db
+      DB_HOST: snippet-share-db
+      DB_PORT: 5433
 
   proxy:
     container_name: "reverse-proxy"
@@ -71,12 +71,14 @@ services:
 #    container_name: "my-server"
 #    build: ./server
 
-  # snippet_infra_db:
-  #   container_name: snippet_infra_db
-  #   image: postgres:12
-  #   ports:
-  #     - "5435:5435"
-  #   environment:
-  #     POSTGRES_USER: sa
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: compose-db
+  snippet-share-db:
+    container_name: snippet-share-db
+    image: postgres:12
+    expose:
+      - "5433"
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: snippet-share-db
