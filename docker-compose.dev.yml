@@ -1,6 +1,13 @@
 version: '3'
 
 services:
+  proxy:
+      container_name: "reverse-proxy"
+      image: nginx
+      ports:
+        - "80:80"
+      volumes:
+        - ./conf.d:/etc/nginx/conf.d:ro
   # snippet-infra-api:
   #   container_name: "snippet-infra-api"
   #   build:
@@ -16,38 +23,38 @@ services:
   #     DB_PORT: 5432
 
 
-  snippet-api:
-    image: ghcr.io/ingsis-group-6/snippet-api:latest
-#    ports:
-#      - "8080:8080"
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_manager_db
-      DB_PORT: 5432
+#   snippet-api:
+#     image: ghcr.io/ingsis-group-6/snippet-api:latest
+# #    ports:
+# #      - "8080:8080"
+#     environment:
+#       DB_USER: sa
+#       DB_PASSWORD: password
+#       DB_NAME: compose-db
+#       DB_HOST: snippet_manager_db
+#       DB_PORT: 5432
 
-  snippet-manager:
-      image: ghcr.io/ingsis-group-6/snippet-manager:latest
-#      ports:
-#        - "8081:8080"
-      environment:
-        DB_USER: sa
-        DB_PASSWORD: password
-        DB_NAME: compose-db
-        DB_HOST: snippet_manager_db
-        DB_PORT: 5432
+#   snippet-manager:
+#       image: ghcr.io/ingsis-group-6/snippet-manager:latest
+# #      ports:
+# #        - "8081:8080"
+#       environment:
+#         DB_USER: sa
+#         DB_PASSWORD: password
+#         DB_NAME: compose-db
+#         DB_HOST: snippet_manager_db
+#         DB_PORT: 5432
 
-  snippet-runner:
-    image: ghcr.io/ingsis-group-6/snippet-runner:latest
-#    ports:
-#      - "8082:8080"
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_manager_db
-      DB_PORT: 5432
+#   snippet-runner:
+#     image: ghcr.io/ingsis-group-6/snippet-runner:latest
+# #    ports:
+# #      - "8082:8080"
+#     environment:
+#       DB_USER: sa
+#       DB_PASSWORD: password
+#       DB_NAME: compose-db
+#       DB_HOST: snippet_manager_db
+#       DB_PORT: 5432
 
   snippet-share:
     image: ghcr.io/ingsis-group-6/snippet-share:latest
@@ -60,13 +67,7 @@ services:
       DB_HOST: snippet-share-db
       DB_PORT: 5433
 
-  proxy:
-    container_name: "reverse-proxy"
-    image: nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./conf.d:/etc/nginx/conf.d:ro
+  
 #  my-server:
 #    container_name: "my-server"
 #    build: ./server
