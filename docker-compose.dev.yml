@@ -44,27 +44,27 @@ services:
 
 
 
-#  snippet-share:
-#    image: ghcr.io/ingsis-group-6/snippet-share-dev:latest
-#    environment:
-#      DD_API_KEY: ${DD_API_KEY}
-#      DB_HOST: snippet-share-db
-#      DB_PORT: 5433
-#      DB_NAME: snippet-share-db
-#      DB_USER: postgres
-#      DB_PASSWORD: pablo
-#    depends_on:
-#      - snippet-share-db
+  snippet-share:
+    image: ghcr.io/ingsis-group-6/snippet-share-dev:latest
+    environment:
+      DD_API_KEY: ${DD_API_KEY}
+      DB_HOST: snippet-share-db
+      DB_PORT: 5433
+      DB_NAME: snippet-share-db
+      DB_USER: postgres
+      DB_PASSWORD: pablo
+    depends_on:
+      - snippet-share-db
 
   snippet-share-db:
     container_name: snippet-share-db
     image: postgres:12
     ports:
-      - "5433:5433"
+      - "5433:5432"
     environment:
       POSTGRES_PASSWORD: pablo
       POSTGRES_DB: snippet-share-db
-    command: -p 5433
+#    command: -p 5433
 
 
 
