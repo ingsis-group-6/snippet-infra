@@ -52,7 +52,7 @@ services:
       DB_PORT: 5433
       DB_NAME: snippet-share-db
       DB_USER: snippet
-      DB_PASSWORD: pablo
+      DB_PASSWORD: password
 
   snippet-share-db:
     container_name: snippet-share-db
@@ -61,7 +61,7 @@ services:
       - "5433:5433"
     environment:
       POSTGRES_USER: snippet
-      POSTGRES_PASSWORD: pablo
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: snippet-share-db
     command: -p 5433
 
