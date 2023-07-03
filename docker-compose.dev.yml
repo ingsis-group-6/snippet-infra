@@ -9,18 +9,78 @@ services:
         - "443:443"
       volumes:
         - ./conf.d:/etc/nginx/conf.d:ro
-        - ./certbot/conf:/etc/letsencrypt
-        - ./certbot/www:/var/www/certbot
+#        - ./certbot/conf:/etc/letsencrypt
+#        - ./certbot/www:/var/www/certbot
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot
-    volumes: 
-      - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/var/www/certbot
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email ricardo.lopez@ing.austral.edu.ar -d ingsisgroup6dev.gleeze.com --agree-tos
 
-  
+#  snippet-manager:
+#      image: ghcr.io/ingsis-group-6/snippet-manager:latest
+#      environment:
+#        DB_USER: sa
+#        DB_PASSWORD: password
+#        DB_NAME: compose-db
+#        DB_HOST: snippet_manager_db
+#        DB_PORT: 5432
+#
+#  snippet-manager-db:
+#    container_name: snippet-share-db
+#    image: postgres:12
+#    ports:
+#      - "5433:5433"
+#    environment:
+#      POSTGRES_USER: sa
+#      POSTGRES_PASSWORD: password
+#      POSTGRES_DB: snippet-share-db
+#    command: -p 5433
+#
+#  snippet-runner:
+#    image: ghcr.io/ingsis-group-6/snippet-runner:latest
+#    environment:
+#      DB_USER: sa
+#      DB_PASSWORD: password
+#      DB_NAME: compose-db
+#      DB_HOST: snippet_manager_db
+#      DB_PORT: 5432
+
+
+
+  snippet-share:
+    image: ghcr.io/ingsis-group-6/snippet-share:latest
+    environment:
+      DD_API_KEY: ${DD_API_KEY}
+      DB_HOST: snippet-share-db
+      DB_PORT: 5433
+      DB_NAME: snippet-share-db
+      DB_USER: snippet
+      DB_PASSWORD: pablo
+
+  snippet-share-db:
+    container_name: snippet-share-db
+    image: postgres:12
+    ports:
+      - "5433:5433"
+    environment:
+      POSTGRES_USER: snippet
+      POSTGRES_PASSWORD: pablo
+      POSTGRES_DB: snippet-share-db
+    command: -p 5433
+
+
+
+
+
+
+
+
+  #  certbot:
+  #    image: certbot/certbot
+  #    container_name: certbot
+  #    volumes:
+  #      - ./certbot/conf:/etc/letsencrypt
+  #      - ./certbot/www:/var/www/certbot
+  #    command: certonly --webroot -w /var/www/certbot --force-renewal --email ricardo.lopez@ing.austral.edu.ar -d ingsisgroup6dev.gleeze.com --agree-tos
+
+
   # snippet-infra-api:
   #   container_name: "snippet-infra-api"
   #   build:
@@ -34,64 +94,3 @@ services:
   #     DB_NAME: compose-db
   #     DB_HOST: snippet_infra_db
   #     DB_PORT: 5432
-
-
-  snippet-api:
-    image: ghcr.io/ingsis-group-6/snippet-api:latest
-#    ports:
-#      - "8080:8080"
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_manager_db
-      DB_PORT: 5432
-
-  snippet-manager:
-      image: ghcr.io/ingsis-group-6/snippet-manager:latest
-#      ports:
-#        - "8081:8080"
-      environment:
-        DB_USER: sa
-        DB_PASSWORD: password
-        DB_NAME: compose-db
-        DB_HOST: snippet_manager_db
-        DB_PORT: 5432
-
-  snippet-runner:
-    image: ghcr.io/ingsis-group-6/snippet-runner:latest
-#    ports:
-#      - "8082:8080"
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_manager_db
-      DB_PORT: 5432
-
-  snippet-share:
-    image: ghcr.io/ingsis-group-6/snippet-share:latest
-#    ports:
-#      - "8083:8080"
-    environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: snippet-share-db
-      DB_HOST: snippet-share-db
-      DB_PORT: 5433
-
-  
-#  my-server:
-#    container_name: "my-server"
-#    build: ./server
-
-  snippet-share-db:
-    container_name: snippet-share-db
-    image: postgres:12
-    ports:
-      - "5433:5433"
-    environment:
-      POSTGRES_USER: sa
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: snippet-share-db
-    command: -p 5433
