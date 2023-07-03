@@ -58,7 +58,7 @@ services:
 
   snippet-share-db:
     container_name: snippet-share-db
-    image: postgres:12
+    image: postgres:alpine
     ports:
       - "5432:5432"
     environment:
