@@ -17,8 +17,6 @@ services:
         - snippet-manager
         - snippet-manager-db
         - snippet-runner
-        - redis
-        - datadog
 
 
   datadog:
