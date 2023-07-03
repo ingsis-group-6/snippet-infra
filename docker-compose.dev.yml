@@ -47,7 +47,7 @@ services:
     container_name: "datadog-dev-env"
     environment:
       - DD_API_KEY=${DD_API_KEY}
-      - DD_SITE=us5.datadoghq.com
+      - DD_SITE=datadoghq.com
       - DD_LOGS_ENABLED=true
       - DD_APM_ENABLED=true
     volumes:
@@ -65,6 +65,8 @@ services:
       DB_NAME: snippet-share-db
       DB_USER: postgres
       DB_PASSWORD: pablo
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-share-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
     depends_on:
       - snippet-share-db
 
