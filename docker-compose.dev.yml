@@ -45,7 +45,7 @@ services:
 
 
   snippet-share:
-    image: ghcr.io/ingsis-group-6/snippet-share:latest
+    image: ghcr.io/ingsis-group-6/snippet-share-dev:latest
     environment:
       DD_API_KEY: ${DD_API_KEY}
       DB_HOST: snippet-share-db
