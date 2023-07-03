@@ -11,36 +11,15 @@ services:
         - ./conf.d:/etc/nginx/conf.d:ro
 #        - ./certbot/conf:/etc/letsencrypt
 #        - ./certbot/www:/var/www/certbot
+      depends_on:
+        - snippet-share
+        - snippet-share-db
+        - snippet-manager
+        - snippet-manager-db
+        - snippet-runner
+        - redis
+        - datadog
 
-
-#  snippet-manager:
-#      image: ghcr.io/ingsis-group-6/snippet-manager:latest
-#      environment:
-#        DB_USER: sa
-#        DB_PASSWORD: password
-#        DB_NAME: compose-db
-#        DB_HOST: snippet_manager_db
-#        DB_PORT: 5432
-#
-#  snippet-manager-db:
-#    container_name: snippet-share-db
-#    image: postgres:12
-#    ports:
-#      - "5433:5433"
-#    environment:
-#      POSTGRES_USER: sa
-#      POSTGRES_PASSWORD: password
-#      POSTGRES_DB: snippet-share-db
-#    command: -p 5433
-#
-#  snippet-runner:
-#    image: ghcr.io/ingsis-group-6/snippet-runner:latest
-#    environment:
-#      DB_USER: sa
-#      DB_PASSWORD: password
-#      DB_NAME: compose-db
-#      DB_HOST: snippet_manager_db
-#      DB_PORT: 5432
 
   datadog:
     image: datadog/agent
