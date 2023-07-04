@@ -83,6 +83,8 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_STREAM_GROUP_LINT: lint-manager
+      AUTH_AUDIENCE: ${AUTH_AUDIENCE}
+      AUTH_ISSUER: ${AUTH_ISSUER}
     expose:
       - 8081
 
