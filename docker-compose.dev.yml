@@ -9,8 +9,8 @@ services:
         - "443:443"
       volumes:
         - ./conf.d:/etc/nginx/conf.d:ro
-        - ./certbot/www:/var/www/certbot/:ro
-        - ./certbot/conf/:/etc/nginx/ssl/:ro
+        - ./certbot/conf:/etc/letsencrypt
+        - ./certbot/www:/var/www/certbot
       depends_on:
         - snippet-share
         - snippet-share-db
@@ -22,8 +22,8 @@ services:
     image: certbot/certbot
     container_name: certbot
     volumes:
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
     command: certonly --webroot -w /var/www/certbot/ --force-renewal --email ricardo.lopez@ing.austral.edu.ar -d ingsisgroup6dev.gleeze.com --agree-tos
 
   datadog:
