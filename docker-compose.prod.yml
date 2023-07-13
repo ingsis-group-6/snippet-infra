@@ -2,83 +2,127 @@ version: '3'
 
 services:
   proxy:
-      container_name: "reverse-proxy"
-      image: nginx
-      ports:
-        - "80:80"
-      volumes:
-        - ./conf.d:/etc/nginx/conf.d:ro
-  # snippet-infra-api:
-  #   container_name: "snippet-infra-api"
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8083:8083"
-  #   environment:
-  #     DB_USER: sa
-  #     DB_PASSWORD: password
-  #     DB_NAME: compose-db
-  #     DB_HOST: snippet_infra_db
-  #     DB_PORT: 5432
+    container_name: "reverse-proxy"
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./conf.d.prod:/etc/nginx/conf.d:ro
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    depends_on:
+      - snippet-share
+      - snippet-share-db
+      - snippet-manager
+      - snippet-manager-db
+      - snippet-runner
 
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot/ --force-renewal --email ricardo.lopez@ing.austral.edu.ar -d ingsisgroup6prod.kozow.com --agree-tos
 
-#   snippet-api:
-#     image: ghcr.io/ingsis-group-6/snippet-api:latest
-# #    ports:
-# #      - "8080:8080"
-#     environment:
-#       DB_USER: sa
-#       DB_PASSWORD: password
-#       DB_NAME: compose-db
-#       DB_HOST: snippet_manager_db
-#       DB_PORT: 5432
-
-  snippet-manager:
-      image: ghcr.io/ingsis-group-6/snippet-manager:latest
-#      ports:
-#        - "8081:8080"
-      environment:
-        DB_USER: sa
-        DB_PASSWORD: password
-        DB_NAME: compose-db
-        DB_HOST: snippet_manager_db
-        DB_PORT: 5432
-
-  snippet-runner:
-    image: ghcr.io/ingsis-group-6/snippet-runner-prod:latest
-#    ports:
-#      - "8082:8080"
+  datadog:
+    image: datadog/agent
+    container_name: "datadog-dev-env"
     environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: compose-db
-      DB_HOST: snippet_manager_db
-      DB_PORT: 5432
+      - DD_API_KEY=${DD_API_KEY}
+      - DD_SITE=us5.datadoghq.com
+      - DD_LOGS_ENABLED=true
+      - DD_APM_ENABLED=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+
 
   snippet-share:
     image: ghcr.io/ingsis-group-6/snippet-share-prod:latest
-#    ports:
-#      - "8083:8080"
     environment:
-      DB_USER: sa
-      DB_PASSWORD: password
-      DB_NAME: snippet-share-db
+      DD_API_KEY: ${DD_API_KEY}
       DB_HOST: snippet-share-db
-      DB_PORT: 5433
-
-  
-#  my-server:
-#    container_name: "my-server"
-#    build: ./server
+      DB_PORT: 5432
+      DB_NAME: snippet-share-db
+      DB_USER: postgres
+      DB_PASSWORD: pablo
+      MANAGER_URI: http://snippet-manager:8081
+    expose:
+      - 8080
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-share-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
+    depends_on:
+      - snippet-share-db
 
   snippet-share-db:
     container_name: snippet-share-db
-    image: postgres:12
-    ports:
-      - "5433:5433"
+    image: postgres:alpine
+    expose:
+      - 5432
     environment:
-      POSTGRES_USER: sa
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pablo
       POSTGRES_DB: snippet-share-db
-    command: -p 5433
+
+
+  redis:
+    container_name: "redis"
+    image: redis:6-alpine
+    expose:
+      - 6379
+
+  snippet-manager:
+    image: ghcr.io/ingsis-group-6/snippet-manager-prod:latest
+    environment:
+      DD_API_KEY: ${DD_API_KEY}
+      DB_HOST: snippet-manager-db
+      DB_PORT: 5432
+      DB_NAME: snippet-manager-db
+      DB_USER: postgres
+      DB_PASSWORD: pablo
+      REDIS_STREAM_REQUEST_KEY: request
+      REDIS_STREAM_RESULT_KEY: result
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_STREAM_GROUP_LINT: lint-manager
+      AUTH_AUDIENCE: ${AUTH_AUDIENCE}
+      AUTH_ISSUER: ${AUTH_ISSUER}
+      SHARE_URI: http://snippet-share:8080/share
+    expose:
+      - 8081
+
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-manager-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
+    depends_on:
+      - snippet-manager-db
+
+  snippet-manager-db:
+    container_name: snippet-manager-db
+    image: postgres:alpine
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pablo
+      POSTGRES_DB: snippet-manager-db
+
+
+
+  snippet-runner:
+    image: ghcr.io/ingsis-group-6/snippet-runner-prod:latest
+    environment:
+      DD_API_KEY: ${DD_API_KEY}
+      REDIS_STREAM_REQUEST_KEY: request
+      REDIS_STREAM_RESULT_KEY: result
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_STREAM_GROUP_LINT: lint-manager
+      MANAGER_URI: http://snippet-manager:8081
+    expose:
+      - 8080
+    labels:
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-runner-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
+
