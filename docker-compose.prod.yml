@@ -53,7 +53,7 @@ services:
     expose:
       - 8080
     labels:
-      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-share-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-share-prod", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
     depends_on:
       - snippet-share-db
 
@@ -95,7 +95,7 @@ services:
       - 8081
 
     labels:
-      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-manager-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-manager-prod", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
     depends_on:
       - snippet-manager-db
 
@@ -124,5 +124,5 @@ services:
     expose:
       - 8080
     labels:
-      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-runner-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
+      com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-runner-prod", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
 
