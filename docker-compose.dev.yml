@@ -94,7 +94,7 @@ services:
       REDIS_STREAM_GROUP_LINT: lint-manager
       AUTH_AUDIENCE: ${AUTH_AUDIENCE}
       AUTH_ISSUER: ${AUTH_ISSUER}
-      SHARE_URI: http://snippet-share:8080
+      SHARE_URI: http://snippet-share:8080/share
     expose:
       - 8081
 
