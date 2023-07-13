@@ -60,23 +60,19 @@ services:
   snippet-share-db:
     container_name: snippet-share-db
     image: postgres:alpine
-#    ports:
-#      - "5433:5432"
     expose:
       - 5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pablo
       POSTGRES_DB: snippet-share-db
-#    command: -p 5433
+
 
   redis:
     container_name: "redis"
     image: redis:6-alpine
     expose:
       - 6379
-#    ports:
-#      - "6379:6379"
 
   snippet-manager:
     image: ghcr.io/ingsis-group-6/snippet-manager-dev:latest
@@ -112,7 +108,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pablo
       POSTGRES_DB: snippet-manager-db
-#    command: -p 5434
+
 
 
   snippet-runner:
@@ -130,28 +126,3 @@ services:
     labels:
       com.datadoghq.ad.logs: '[{"source": "java", "service": "snippet-runner-dev", "log_processing_rules": [{"type": "multi_line", "name": "log_start_with_date", "pattern" : "\\d{4}-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"}]}]'
 
-
-
-
-  #  certbot:
-  #    image: certbot/certbot
-  #    container_name: certbot
-  #    volumes:
-  #      - ./certbot/conf:/etc/letsencrypt
-  #      - ./certbot/www:/var/www/certbot
-  #    command: certonly --webroot -w /var/www/certbot --force-renewal --email ricardo.lopez@ing.austral.edu.ar -d ingsisgroup6dev.gleeze.com --agree-tos
-
-
-  # snippet-infra-api:
-  #   container_name: "snippet-infra-api"
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8083:8083"
-  #   environment:
-  #     DB_USER: sa
-  #     DB_PASSWORD: password
-  #     DB_NAME: compose-db
-  #     DB_HOST: snippet_infra_db
-  #     DB_PORT: 5432
